@@ -1,0 +1,76 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ebanda-dev-test-nestjs-service
+  description: 'The NestJS service plus PostgreSQL databaes for ebanda-dev-test-nestjs-service (Creates a NestJS Service together with a PostgreSQL database)'
+  annotations:
+    argocd/app-name: ebanda-dev-test-nestjs-service-dev
+    backstage.io/kubernetes-id: ebanda-dev-test-nestjs-service
+    backstage.io/kubernetes-namespace: ebanda-dev
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: erica-banda-03/ebanda-dev-test-nestjs-service
+    janus-idp.io/tekton : ebanda-dev-test-nestjs-service
+  tags:
+    - nodejs
+    - nestjs
+    - book
+    - example
+  links:
+    - url: https://console-openshift-consoleapps.664219395ed920001eb457db.cloud.techzone.ibm.com/dev-pipelines/ns/ebanda-dev/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-consoleapps.664219395ed920001eb457db.cloud.techzone.ibm.com/k8s/ns/ebanda-dev/deployments/ebanda-dev-test-nestjs-service
+      title: Deployment
+      icon: web
+    - url: https://devspacesapps.664219395ed920001eb457db.cloud.techzone.ibm.com/#https://github.com/erica-banda-03/ebanda-dev-test-nestjs-service?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/erica-banda-03"
+  system: idp-system-ebanda-dev
+  providesApis:
+    - ebanda-dev-test-nestjs-service-api
+  dependsOn: 
+    - resource:default/ebanda-dev-test-nestjs-service-db
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: idp-system-ebanda-dev
+  tags:
+    - rhdh
+    - book
+spec:
+  owner: "user:default/erica-banda-03"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: ebanda-dev-test-nestjs-service-api
+  description: API surface exposed by the NestJS service
+  links:
+    - url: https://ebanda-dev-test-nestjs-service-ebanda-devapps.664219395ed920001eb457db.cloud.techzone.ibm.com/swagger
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/erica-banda-03/ebanda-dev-test-nestjs-service/-/blob/main/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/erica-banda-03"
+  system: idp-system-ebanda-dev
+  definition:
+    $text: ./openapi.yaml
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ebanda-dev-test-nestjs-service-db
+  description: database backing the NestJS service
+spec:
+  type: database
+  owner: "user:default/erica-banda-03"
+  system: idp-system-ebanda-dev
